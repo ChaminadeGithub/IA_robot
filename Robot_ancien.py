@@ -14,28 +14,45 @@ def parler(text):
     engine.say(text)
     engine.runAndWait()
 
+
 def ecouter():
+    rec = ''  # Valeur par défaut si aucune voix n'est détectée
     try:
         with sr.Microphone() as source:
             print("Je vous écoute...")
             voice = listener.listen(source)
             rec = listener.recognize_google(voice, language='fr-FR')
-            # rec = rec.lower()
-            # print(rec)
     except:
         pass
     return rec
 
+# def ecouter():
+#     try:
+#         with sr.Microphone() as source:
+#             print("Je vous écoute...")
+#             voice = listener.listen(source)
+#             rec = listener.recognize_google(voice, language='fr-FR')
+#             # rec = rec.lower()
+#             # print(rec)
+#     except:
+#         pass
+#     return rec
+
+
+
+
 def assistant_chaminade():
     rec = ecouter()
     print(rec)
-    if 'bonjour' or 'bonsoir' or 'salut' or 'coucou' in rec:
+    # if 'bonjour' or 'bonsoir' or 'salut' or 'coucou' in rec:
+    if any(x in rec for x in ['bonjour', 'bonsoir', 'salut', 'coucou']):
         parler('Salut, ravi de vous entendre a nouveau, comment puis-je vous aider ?')
     elif 'heure' in rec:
         heure = datetime.datetime.now().strftime('%H:%M')
         parler('Il est ' + heure)
         print(heure)
-    elif 'joue la musique' or 'la chanson' or 'une musique' in rec:
+    # elif 'joue la musique' or 'la chanson' or 'une musique' in rec:
+    elif any(x in rec for x in ['joue la musique', 'la chanson', 'une musique']):
         parler('Je ne sais pas jouer de la musique, mais je peux vous chercher une musique de votre choix')
         check = rec.replace('joue musique', '')
         parler('Je recherche ' + check)
@@ -53,9 +70,11 @@ def assistant_chaminade():
     #     parler('Je recherche ' + check)
     #     print(check)
     #     webbrowser.open('https://www.google.com/search?q=' + check)
-    elif 'ton nom' or 'tu t''appelles' or 'presente toi' or 'qui es-tu' :
+    # elif 'ton nom' or 'tu t''appelles' or 'presente toi' or 'qui es-tu' :
+    if any(x in rec for x in ['ton nom', 'tu t\'appelles', 'présente toi', 'qui es-tu']):
         parler('Je suis un robot, une intelligence capable de parler, un assistant créé par Mr. Chaminade')
-    elif 'merci' or 'd''accord' or 'ok' in rec:
+    # elif 'merci' or 'd''accord' or 'ok' in rec:
+    elif any(x in rec for x in ['merci', 'd\'accord', 'ok']):
         parler('ravi que vous ayez demander a me connaitre')
     # elif 'au revoir' in rec:
     #     parler('Au revoir')
@@ -79,17 +98,8 @@ def assistant_chaminade():
     else:
         parler('Je ne comprends pas ce que vous dites')
 
-
 while True:
     assistant_chaminade()
-
-
-
-
-
-
-
-
 
 
     # rec = ecouter()
